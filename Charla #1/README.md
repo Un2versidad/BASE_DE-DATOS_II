@@ -81,22 +81,303 @@ graph TB
 
 ```mermaid
 erDiagram
-    pacientes ||--o{ citas : "tiene"
-    pacientes ||--o{ resultados_laboratorio : "tiene"
-    pacientes ||--o{ recetas : "tiene"
-    pacientes ||--o{ notas_medicas : "tiene"
-    doctores ||--o{ citas : "atiende"
-    doctores ||--|| credenciales_doctores : "tiene"
-    doctores ||--o{ recetas : "emite"
-    doctores ||--o{ notas_medicas : "escribe"
-    doctores ||--o{ resultados_laboratorio : "ordena/revisa"
-    solicitudes_registro_doctores }o--|| doctores : "se convierte en"
-    citas ||--o{ recetas : "genera"
-    citas ||--o{ notas_medicas : "genera"
-    fuentes_datos ||--o{ pipelines_etl : "alimenta"
-    pipelines_etl ||--o{ logs_pipeline : "genera"
-    import_jobs ||--o{ logs_pipeline : "genera"
-    import_jobs ||--o{ pacientes : "importa"
+    %% ============================================
+    %% DIAGRAMA ENTIDAD-RELACIÓN - MEDCOMLABS
+    %% Base de datos con cifrado AES-256-GCM
+    %% ============================================
+
+    %% ENTIDADES PRINCIPALES
+    
+    PACIENTES {
+        uuid id PK
+        text cedula_hash UK "Hash para búsqueda"
+        text cedula_encrypted "Cifrado AES-256"
+        text cedula_iv
+        text nombre_encrypted "Cifrado"
+        text nombre_iv
+        text email_encrypted "Cifrado"
+        text email_iv
+        text telefono_encrypted "Cifrado"
+        text telefono_iv
+        text direccion_encrypted "Cifrado"
+        text direccion_iv
+        text codigo_acceso "Cifrado empaquetado"
+        text codigo_acceso_hash UK
+        text fecha_nacimiento "Cifrado empaquetado"
+        text tipo_sangre "Cifrado empaquetado"
+        text genero "masculino|femenino|otro"
+        text alergias_encrypted "Cifrado"
+        text alergias_iv
+        text condiciones_encrypted "Cifrado"
+        text condiciones_iv
+        text contacto_emergencia_encrypted "Cifrado"
+        text contacto_emergencia_iv
+        text notas_encrypted "Cifrado"
+        text notas_iv
+        text status "active|inactive|deceased"
+        text source "manual|etl_import|api"
+        uuid import_job_id FK
+        timestamptz created_at
+        timestamptz updated_at
+    }
+
+    DOCTORES {
+        uuid id PK
+        text nombre_cifrado "Cifrado"
+        text nombre_iv
+        text especialidad
+        text numero_licencia "Cifrado empaquetado"
+        text numero_licencia_hash UK
+        text email_cifrado "Cifrado"
+        text email_iv
+        text telefono_cifrado "Cifrado"
+        text telefono_iv
+        text foto_url
+        text[] dias_disponibles
+        time hora_inicio
+        time hora_fin
+        integer duracion_cita_minutos
+        boolean is_active
+        timestamptz created_at
+        timestamptz updated_at
+    }
+
+    CREDENCIALES_DOCTORES {
+        uuid id PK
+        uuid doctor_id FK
+        text email UK
+        text password_hash
+        text refresh_token
+        timestamptz refresh_token_expira
+        boolean esta_aprobado
+        boolean esta_activo
+        timestamptz fecha_aprobacion
+        uuid aprobado_por FK
+        text motivo_rechazo
+        boolean email_verificado
+        text token_verificacion
+        integer intentos_fallidos
+        timestamptz bloqueado_hasta
+        timestamptz ultimo_login
+        text ultimo_ip
+        timestamptz created_at
+        timestamptz updated_at
+    }
+
+    SOLICITUDES_REGISTRO_DOCTORES {
+        uuid id PK
+        text nombre "Cifrado empaquetado"
+        text email "Cifrado empaquetado"
+        text email_hash UK
+        text password_hash
+        text especialidad
+        text numero_licencia "Cifrado empaquetado"
+        text numero_licencia_hash
+        text telefono "Cifrado empaquetado"
+        text estado "pendiente|aprobado|rechazado"
+        text motivo_rechazo "Cifrado empaquetado"
+        uuid revisado_por FK
+        timestamptz fecha_revision
+        timestamptz created_at
+        timestamptz updated_at
+    }
+
+    CITAS {
+        uuid id PK
+        text numero_turno "Cifrado empaquetado"
+        text numero_turno_hash UK
+        uuid paciente_id FK
+        uuid doctor_id FK
+        text departamento
+        date fecha_cita
+        time hora_cita
+        text tipo_consulta "primera_vez|control|emergencia|seguimiento"
+        text nombre_paciente_cifrado "Opcional cifrado"
+        text nombre_paciente_iv
+        text cedula_paciente_cifrada "Opcional cifrado"
+        text cedula_paciente_iv
+        text telefono_paciente_cifrado "Opcional cifrado"
+        text telefono_paciente_iv
+        text estado "programada|confirmada|en_progreso|completada|cancelada|no_asistio"
+        integer prioridad "1-10"
+        integer tiempo_espera_estimado
+        timestamptz hora_llegada
+        timestamptz hora_inicio_consulta
+        timestamptz hora_fin_consulta
+        text motivo_consulta "Cifrado empaquetado"
+        text notas "Cifrado empaquetado"
+        timestamptz created_at
+        timestamptz updated_at
+    }
+
+    RESULTADOS_LABORATORIO {
+        uuid id PK
+        uuid paciente_id FK
+        text nombre_examen
+        text tipo_examen "hematologia|bioquimica|microbiologia|urinalisis|imagenologia|otro"
+        text resultados_cifrados "Cifrado"
+        text resultados_iv
+        text estado "pendiente|en_proceso|completado|revisado"
+        text prioridad "baja|normal|alta|urgente"
+        date fecha_orden
+        date fecha_completado
+        date fecha_revisado
+        uuid ordenado_por FK
+        uuid revisado_por FK
+        text notas_cifradas "Cifrado"
+        text notas_iv
+        text interpretacion
+        boolean requiere_seguimiento
+        timestamptz created_at
+        timestamptz updated_at
+    }
+
+    RECETAS {
+        uuid id PK
+        uuid paciente_id FK
+        uuid doctor_id FK
+        uuid cita_id FK
+        jsonb medicamentos
+        text diagnostico
+        date fecha_emision
+        date fecha_vencimiento
+        text estado "activa|dispensada|vencida|cancelada"
+        text indicaciones_generales
+        timestamptz created_at
+        timestamptz updated_at
+    }
+
+    NOTAS_MEDICAS {
+        uuid id PK
+        uuid paciente_id FK
+        uuid doctor_id FK
+        uuid cita_id FK
+        text titulo
+        text contenido "Texto plano"
+        text contenido_cifrado "Cifrado si confidencial"
+        text contenido_iv
+        boolean es_confidencial
+        text tipo "consulta|evolucion|interconsulta|alta|otro"
+        timestamptz created_at
+        timestamptz updated_at
+    }
+
+    NOTIFICACIONES {
+        uuid id PK
+        uuid destinatario_id
+        text tipo_destinatario "doctor|admin|paciente"
+        text titulo "Cifrado empaquetado"
+        text mensaje "Cifrado empaquetado"
+        text tipo "cita|resultado|sistema|recordatorio|alerta|aprobacion"
+        text referencia_tipo
+        uuid referencia_id
+        boolean leida
+        timestamptz fecha_leida
+        text prioridad "baja|normal|alta|urgente"
+        timestamptz created_at
+    }
+
+    REGISTROS_SEGURIDAD {
+        uuid id PK
+        text tipo_evento "Cifrado empaquetado"
+        text descripcion "Cifrado empaquetado"
+        uuid usuario_id
+        text usuario_email "Cifrado empaquetado"
+        text usuario_tipo
+        text direccion_ip
+        text user_agent "Cifrado empaquetado"
+        text metadatos "Cifrado empaquetado (era JSONB)"
+        boolean exitoso
+        timestamptz created_at
+    }
+
+    %% ENTIDADES ETL
+
+    FUENTES_DATOS {
+        uuid id PK
+        text nombre
+        text tipo_fuente "csv|json|api|database|excel"
+        jsonb configuracion
+        boolean esta_cifrado
+        boolean activo
+        timestamptz created_at
+        timestamptz updated_at
+    }
+
+    PIPELINES_ETL {
+        uuid id PK
+        text nombre
+        text descripcion
+        uuid fuente_id FK
+        text estado "active|inactive|error|running"
+        text programacion
+        timestamptz ultima_ejecucion
+        timestamptz proxima_ejecucion
+        jsonb configuracion
+        timestamptz created_at
+        timestamptz updated_at
+    }
+
+    IMPORT_JOBS {
+        uuid id PK
+        text file_name
+        text file_type "csv|json|xlsx"
+        integer total_records
+        integer processed_records
+        integer successful_records
+        integer failed_records
+        text status "pending|processing|completed|failed|cancelled"
+        jsonb error_log
+        jsonb field_mapping
+        boolean encrypt_data
+        boolean skip_duplicates
+        uuid created_by
+        timestamptz created_at
+        timestamptz started_at
+        timestamptz completed_at
+    }
+
+    LOGS_PIPELINE {
+        uuid id PK
+        uuid pipeline_id FK
+        uuid import_job_id FK
+        text nivel "debug|info|warning|error|critical"
+        text mensaje
+        jsonb metadatos
+        timestamptz created_at
+    }
+
+    %% ============================================
+    %% RELACIONES
+    %% ============================================
+
+    %% Relaciones de DOCTORES
+    DOCTORES ||--o{ CREDENCIALES_DOCTORES : "tiene"
+    DOCTORES ||--o{ CITAS : "atiende"
+    DOCTORES ||--o{ RESULTADOS_LABORATORIO : "ordena"
+    DOCTORES ||--o{ RESULTADOS_LABORATORIO : "revisa"
+    DOCTORES ||--o{ RECETAS : "emite"
+    DOCTORES ||--o{ NOTAS_MEDICAS : "escribe"
+
+    %% Relaciones de PACIENTES
+    PACIENTES ||--o{ CITAS : "solicita"
+    PACIENTES ||--o{ RESULTADOS_LABORATORIO : "recibe"
+    PACIENTES ||--o{ RECETAS : "recibe"
+    PACIENTES ||--o{ NOTAS_MEDICAS : "tiene"
+    
+    %% Relaciones de CITAS
+    CITAS ||--o{ RECETAS : "genera"
+    CITAS ||--o{ NOTAS_MEDICAS : "documenta"
+
+    %% Relaciones ETL
+    FUENTES_DATOS ||--o{ PIPELINES_ETL : "alimenta"
+    PIPELINES_ETL ||--o{ LOGS_PIPELINE : "registra"
+    IMPORT_JOBS ||--o{ LOGS_PIPELINE : "documenta"
+    IMPORT_JOBS ||--o{ PACIENTES : "importa"
+
+    %% Relaciones de SOLICITUDES
+    SOLICITUDES_REGISTRO_DOCTORES }o--|| DOCTORES : "revisada_por"
+    CREDENCIALES_DOCTORES }o--|| DOCTORES : "aprobada_por"
 ```
 
 ---
