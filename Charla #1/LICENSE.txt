@@ -1,0 +1,27 @@
+
+CUSTOM LICENSE AGREEMENT
+All Rights Reserved - Non-Commercial Use Only
+
+Copyright (c) 2026 Fl2on
+
+1. Ownership
+This software project, including all source code, images, assets, documentation,
+and related materials (the "Project"), is the exclusive property of the copyright holder.
+
+2. Permitted Use
+You may download and view the Project for personal, private, and non-commercial purposes only.
+
+3. Restrictions
+You are NOT permitted to:
+- Use the Project or any part of it for commercial purposes.
+- Sell, sublicense, or redistribute the Project.
+- Modify and distribute modified versions of the Project.
+- Use any images or assets from the Project in commercial works.
+
+4. Commercial Licensing
+Any commercial use requires explicit prior written permission from the copyright holder.
+
+5. No Warranty
+The Project is provided "as is", without warranty of any kind.
+
+For commercial licensing inquiries, contact the copyright holder directly.
