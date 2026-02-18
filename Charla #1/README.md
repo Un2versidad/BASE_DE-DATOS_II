@@ -74,21 +74,11 @@ Este proyecto:
 
 Su contenido es únicamente demostrativo.
 
----
-
 ## 📌 Responsabilidad
 
 El autor no se hace responsable por el uso indebido del contenido fuera de su contexto académico.
 
 Si alguna entidad considera que existe una coincidencia no intencionada, puede tratarse de una simulación con fines exclusivamente educativos.
-
----
-
-<div align="center">
-
-**Proyecto Académico | Uso Educativo | No Comercial**
-
-</div>
 
 
 # Screenshot 
@@ -624,3 +614,11 @@ JWT_REFRESH_SECRET=clave-secreta-jwt-refresh
 ---
 
 > MedComLabs — Gestión hospitalaria moderna con ETL y cifrado de base de datos.
+
+---
+
+<div align="center">
+
+**Proyecto Académico | Uso Educativo | No Comercial**
+
+</div>
