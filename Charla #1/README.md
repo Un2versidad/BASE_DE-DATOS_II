@@ -1,5 +1,6 @@
 <img width="1129" height="421" alt="image" src="https://github.com/user-attachments/assets/3331926b-aec7-4eb6-afa2-1e93ea69635c" />
 
+
 # MedComLabs — Gestión Moderna de ETL y Cifrado de Base de Datos
 
 > Plataforma hospitalaria con ETL avanzado y cifrado AES-256-GCM de extremo a extremo
@@ -14,7 +15,84 @@ MedComLabs es un sistema hospitalario moderno que integra:
 - **Notificaciones y resultados por email** usando Resend
 - **Gestión de usuarios, autenticación JWT, y seguridad avanzada**
 
+## ⚠️ AVISO LEGAL – PROYECTO EDUCATIVO
+
+> **Este repositorio ha sido creado exclusivamente con fines académicos y de aprendizaje.**  
+> No representa una entidad real ni ofrece servicios reales al público.
+
 ---
+
+## 🎓 Finalidad del Proyecto
+
+Este proyecto fue desarrollado como parte de un ejercicio educativo para demostrar:
+
+- Diseño y maquetación web
+- Estructuración de contenido institucional
+- Simulación de entornos empresariales
+- Implementación técnica con fines prácticos
+
+Su único propósito es **formativo y no comercial**.
+
+---
+
+## 🏷️ Sobre Nombres, Marcas y Certificaciones
+
+Todos los elementos mencionados en el proyecto, incluyendo pero no limitándose a:
+
+- Nombres de empresas
+- Logotipos
+- Marcas comerciales
+- Certificaciones
+- Afiliaciones institucionales
+- Información corporativa
+- Datos de contacto
+- Ubicaciones
+
+Han sido utilizados **únicamente para aportar realismo visual y contextual al ejercicio académico**.
+
+### ❗ Importante
+
+- No representan entidades reales verificadas.
+- No constituyen certificaciones oficiales.
+- No implican vínculos comerciales auténticos.
+- No cuentan con respaldo institucional.
+- No deben interpretarse como información factual.
+
+Cualquier similitud con organizaciones, empresas o personas reales es **coincidencia** o uso ilustrativo dentro de un entorno simulado.
+
+---
+
+## 🚫 Uso No Comercial
+
+Este proyecto:
+
+- No presta servicios médicos ni profesionales reales.
+- No procesa datos reales de usuarios.
+- No realiza transacciones comerciales.
+- No tiene fines lucrativos.
+- No busca suplantar entidades existentes.
+
+Su contenido es únicamente demostrativo.
+
+---
+
+## 📌 Responsabilidad
+
+El autor no se hace responsable por el uso indebido del contenido fuera de su contexto académico.
+
+Si alguna entidad considera que existe una coincidencia no intencionada, puede tratarse de una simulación con fines exclusivamente educativos.
+
+---
+
+<div align="center">
+
+**Proyecto Académico | Uso Educativo | No Comercial**
+
+</div>
+
+
+# Screenshot 
+<img width="500" height="9855" alt="image" src="https://github.com/user-attachments/assets/c9687ad2-fe49-43f0-a532-4705251b1165" />
 
 ## Stack Tecnológico
 
