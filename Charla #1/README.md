@@ -1,10 +1,9 @@
 <img width="1129" height="421" alt="image" src="https://github.com/user-attachments/assets/3331926b-aec7-4eb6-afa2-1e93ea69635c" />
 
-
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/Un2versidad/BASE_DE-DATOS_II)
 # MedComLabs — Gestión Moderna de ETL y Cifrado de Base de Datos
 
 > Plataforma hospitalaria con ETL avanzado y cifrado AES-256-GCM de extremo a extremo
-
 ---
 
 ## Descripción General
