@@ -1,0 +1,16 @@
+paciente_cedula,nombre_paciente,tipo_examen,nombre_examen,fecha_orden,fecha_completado,estado,prioridad,resultado_hemoglobina,resultado_glucosa,resultado_colesterol,resultado_trigliceridos,resultado_creatinina,notas,interpretacion
+8-888-1234,María Elena Rodríguez,hematologia,Hemograma Completo,2026-02-10,2026-02-11,completado,normal,14.2,95,185,145,0.9,Muestra en buenas condiciones,Valores dentro de parámetros normales
+8-777-5678,Carlos Alberto Pérez,bioquimica,Perfil Lipídico,2026-02-08,2026-02-09,completado,alta,13.8,102,245,220,1.1,Paciente en ayunas 12h,Colesterol y triglicéridos elevados - Requiere seguimiento
+8-999-9012,Ana Sofía Martínez,hematologia,Hemograma Completo,2026-02-12,,pendiente,normal,,,,,,Muestra programada para mañana,
+8-666-3456,Roberto José González,bioquimica,Glucosa en Ayunas,2026-02-11,2026-02-12,completado,urgente,15.1,210,190,175,1.3,Paciente diabético conocido,Glucosa marcadamente elevada - Ajustar tratamiento
+8-555-7890,Laura Patricia Sánchez,urinalisis,Examen de Orina Completo,2026-02-09,2026-02-10,completado,normal,,85,,,0.7,Control prenatal,Sin alteraciones - Embarazo normal
+8-333-6789,Diana Carolina López,bioquimica,Perfil Hepático,2026-02-10,2026-02-11,completado,alta,12.5,90,175,130,0.8,Paciente con tratamiento biológico,Transaminasas dentro de límites normales
+8-222-0123,Fernando Luis Castillo,hematologia,Hemograma con Plaquetas,2026-02-13,,en_proceso,normal,,,,,,Muestra en análisis,
+8-111-4567,Patricia Isabel Moreno,bioquimica,Hemoglobina Glicosilada,2026-02-07,2026-02-08,completado,alta,,145,,,,HbA1c: 7.8%,Control glucémico mejorado - Continuar tratamiento
+8-100-8901,Andrés Felipe Díaz,urinalisis,PSA Total,2026-02-12,,pendiente,urgente,,,,,,Estudio de próstata solicitado,
+8-200-2345,Carmen Lucía Torres,otro,Electrocardiograma,2026-02-06,2026-02-06,completado,normal,,,,,,Ritmo sinusal 72 bpm,ECG normal - Apta para cirugía
+8-300-6789,Ricardo Antonio Vargas,bioquimica,Perfil Hepático y Renal,2026-02-11,2026-02-12,completado,normal,14.0,88,165,140,1.0,Evaluación pre-endoscopia,Función hepática y renal normales
+8-400-0123,Gabriela María Ruiz,hematologia,Hemograma Pre-empleo,2026-02-13,,pendiente,normal,,,,,,Chequeo ocupacional,
+8-500-4567,Luis Eduardo Ramírez,bioquimica,Calcio y Vitamina D,2026-01-15,2026-01-16,completado,normal,,,,,,Post-fractura,Niveles adecuados de calcio
+8-600-8901,Sofía Valentina Cruz,otro,Espirometría,2026-02-08,2026-02-09,completado,normal,,,,,,Control de asma,FEV1 85% - Asma leve controlada
+8-888-1234,María Elena Rodríguez,bioquimica,Perfil Tiroideo,2026-02-05,2026-02-06,completado,normal,,,,,0.85,TSH y T4 libre,Función tiroidea normal

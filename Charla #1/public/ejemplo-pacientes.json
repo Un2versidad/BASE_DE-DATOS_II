@@ -1,0 +1,66 @@
+{
+  "pacientes": [
+    {
+      "cedula": "8-700-1234",
+      "nombre": "Alejandra Mendoza Torres",
+      "email": "alejandra.mendoza@email.com",
+      "telefono": "+507 6700-1234",
+      "direccion": "Paitilla Torre 100",
+      "fecha_nacimiento": "1982-06-15",
+      "tipo_sangre": "O+",
+      "genero": "femenino",
+      "alergias": "Sulfas",
+      "condiciones": "Hipertensión controlada",
+      "notas": "Paciente regular desde 2020"
+    },
+    {
+      "cedula": "8-701-5678",
+      "nombre": "Ricardo Vargas Delgado",
+      "email": "ricardo.vargas@email.com",
+      "telefono": "+507 6701-5678",
+      "direccion": "San Francisco Avenida 4",
+      "fecha_nacimiento": "1975-03-22",
+      "tipo_sangre": "A+",
+      "genero": "masculino",
+      "alergias": "Ninguna conocida",
+      "condiciones": "Diabetes tipo 2",
+      "notas": "Control trimestral - HbA1c 7.2%"
+    },
+    {
+      "cedula": "8-702-9012",
+      "nombre": "Carmen Lucia Rios",
+      "email": "carmen.rios@email.com",
+      "telefono": "+507 6702-9012",
+      "direccion": "Costa del Este",
+      "fecha_nacimiento": "1990-11-08",
+      "tipo_sangre": "B+",
+      "genero": "femenino",
+      "notas": "Embarazo - 32 semanas"
+    },
+    {
+      "cedula": "8-703-3456",
+      "nombre": "Miguel Angel Ortega",
+      "email": "miguel.ortega@email.com",
+      "telefono": "+507 6703-3456",
+      "direccion": "El Dorado Calle 78",
+      "fecha_nacimiento": "1968-07-19",
+      "tipo_sangre": "AB-",
+      "genero": "masculino",
+      "alergias": "Penicilina, Mariscos",
+      "condiciones": "Cardiopatía isquémica, Dislipidemia",
+      "notas": "Paciente de alto riesgo cardiovascular"
+    },
+    {
+      "cedula": "8-704-7890",
+      "nombre": "Sofia Elena Castro",
+      "email": "sofia.castro@email.com",
+      "telefono": "+507 6704-7890",
+      "direccion": "Obarrio Edificio Plaza",
+      "fecha_nacimiento": "1995-01-30",
+      "tipo_sangre": "O-",
+      "genero": "femenino",
+      "condiciones": "Anemia ferropénica",
+      "notas": "Suplementación de hierro activa"
+    }
+  ]
+}

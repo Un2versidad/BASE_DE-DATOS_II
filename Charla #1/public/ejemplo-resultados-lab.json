@@ -1,0 +1,209 @@
+{
+  "metadata": {
+    "source": "Sistema de Laboratorio MedComLabs",
+    "version": "1.0",
+    "timestamp": "2026-02-13T10:00:00Z",
+    "total_records": 10
+  },
+  "resultados": [
+    {
+      "paciente": {
+        "cedula": "8-888-1234",
+        "nombre": "María Elena Rodríguez"
+      },
+      "examen": {
+        "tipo": "hematologia",
+        "nombre": "Hemograma Completo",
+        "fecha_orden": "2026-02-10",
+        "fecha_completado": "2026-02-11"
+      },
+      "estado": "completado",
+      "prioridad": "normal",
+      "resultados": {
+        "hemoglobina": { "valor": 14.2, "unidad": "g/dL", "referencia": "12.0-16.0" },
+        "hematocrito": { "valor": 42.5, "unidad": "%", "referencia": "36-48" },
+        "leucocitos": { "valor": 7200, "unidad": "/mm³", "referencia": "4500-11000" },
+        "plaquetas": { "valor": 245000, "unidad": "/mm³", "referencia": "150000-400000" }
+      },
+      "interpretacion": "Valores dentro de parámetros normales"
+    },
+    {
+      "paciente": {
+        "cedula": "8-777-5678",
+        "nombre": "Carlos Alberto Pérez"
+      },
+      "examen": {
+        "tipo": "bioquimica",
+        "nombre": "Perfil Lipídico",
+        "fecha_orden": "2026-02-08",
+        "fecha_completado": "2026-02-09"
+      },
+      "estado": "completado",
+      "prioridad": "alta",
+      "resultados": {
+        "colesterol_total": { "valor": 245, "unidad": "mg/dL", "referencia": "<200" },
+        "colesterol_hdl": { "valor": 38, "unidad": "mg/dL", "referencia": ">40" },
+        "colesterol_ldl": { "valor": 163, "unidad": "mg/dL", "referencia": "<130" },
+        "trigliceridos": { "valor": 220, "unidad": "mg/dL", "referencia": "<150" }
+      },
+      "interpretacion": "Dislipidemia mixta - Requiere tratamiento"
+    },
+    {
+      "paciente": {
+        "cedula": "8-666-3456",
+        "nombre": "Roberto José González"
+      },
+      "examen": {
+        "tipo": "bioquimica",
+        "nombre": "Glucosa en Ayunas",
+        "fecha_orden": "2026-02-11",
+        "fecha_completado": "2026-02-12"
+      },
+      "estado": "completado",
+      "prioridad": "urgente",
+      "resultados": {
+        "glucosa": { "valor": 210, "unidad": "mg/dL", "referencia": "70-100" },
+        "hemoglobina_glicosilada": { "valor": 9.2, "unidad": "%", "referencia": "<6.5" }
+      },
+      "interpretacion": "Diabetes descompensada - Ajustar tratamiento inmediatamente"
+    },
+    {
+      "paciente": {
+        "cedula": "8-555-7890",
+        "nombre": "Laura Patricia Sánchez"
+      },
+      "examen": {
+        "tipo": "urinalisis",
+        "nombre": "Examen de Orina Completo",
+        "fecha_orden": "2026-02-09",
+        "fecha_completado": "2026-02-10"
+      },
+      "estado": "completado",
+      "prioridad": "normal",
+      "resultados": {
+        "ph": { "valor": 6.0, "unidad": "", "referencia": "5.0-8.0" },
+        "densidad": { "valor": 1.015, "unidad": "", "referencia": "1.005-1.030" },
+        "proteinas": { "valor": "Negativo", "unidad": "", "referencia": "Negativo" },
+        "glucosa": { "valor": "Negativo", "unidad": "", "referencia": "Negativo" },
+        "leucocitos": { "valor": "0-2", "unidad": "/campo", "referencia": "0-5" }
+      },
+      "interpretacion": "Orina normal - Control prenatal satisfactorio"
+    },
+    {
+      "paciente": {
+        "cedula": "8-333-6789",
+        "nombre": "Diana Carolina López"
+      },
+      "examen": {
+        "tipo": "bioquimica",
+        "nombre": "Perfil Hepático",
+        "fecha_orden": "2026-02-10",
+        "fecha_completado": "2026-02-11"
+      },
+      "estado": "completado",
+      "prioridad": "alta",
+      "resultados": {
+        "ast": { "valor": 28, "unidad": "U/L", "referencia": "5-40" },
+        "alt": { "valor": 32, "unidad": "U/L", "referencia": "7-56" },
+        "fosfatasa_alcalina": { "valor": 85, "unidad": "U/L", "referencia": "44-147" },
+        "bilirrubina_total": { "valor": 0.8, "unidad": "mg/dL", "referencia": "0.1-1.2" }
+      },
+      "interpretacion": "Función hepática normal - Apta para continuar terapia biológica"
+    },
+    {
+      "paciente": {
+        "cedula": "8-999-9012",
+        "nombre": "Ana Sofía Martínez"
+      },
+      "examen": {
+        "tipo": "hematologia",
+        "nombre": "Hemograma Completo",
+        "fecha_orden": "2026-02-12",
+        "fecha_completado": null
+      },
+      "estado": "pendiente",
+      "prioridad": "normal",
+      "resultados": null,
+      "interpretacion": null
+    },
+    {
+      "paciente": {
+        "cedula": "8-222-0123",
+        "nombre": "Fernando Luis Castillo"
+      },
+      "examen": {
+        "tipo": "hematologia",
+        "nombre": "Hemograma con Plaquetas",
+        "fecha_orden": "2026-02-13",
+        "fecha_completado": null
+      },
+      "estado": "en_proceso",
+      "prioridad": "normal",
+      "resultados": null,
+      "interpretacion": null
+    },
+    {
+      "paciente": {
+        "cedula": "8-200-2345",
+        "nombre": "Carmen Lucía Torres"
+      },
+      "examen": {
+        "tipo": "otro",
+        "nombre": "Electrocardiograma",
+        "fecha_orden": "2026-02-06",
+        "fecha_completado": "2026-02-06"
+      },
+      "estado": "completado",
+      "prioridad": "normal",
+      "resultados": {
+        "ritmo": { "valor": "Sinusal", "unidad": "", "referencia": "Sinusal" },
+        "frecuencia": { "valor": 72, "unidad": "lpm", "referencia": "60-100" },
+        "eje": { "valor": 45, "unidad": "°", "referencia": "0-90" },
+        "pr": { "valor": 160, "unidad": "ms", "referencia": "120-200" },
+        "qrs": { "valor": 90, "unidad": "ms", "referencia": "80-120" }
+      },
+      "interpretacion": "ECG normal - Apta para cirugía de cataratas"
+    },
+    {
+      "paciente": {
+        "cedula": "8-300-6789",
+        "nombre": "Ricardo Antonio Vargas"
+      },
+      "examen": {
+        "tipo": "bioquimica",
+        "nombre": "Perfil Hepático y Renal",
+        "fecha_orden": "2026-02-11",
+        "fecha_completado": "2026-02-12"
+      },
+      "estado": "completado",
+      "prioridad": "normal",
+      "resultados": {
+        "creatinina": { "valor": 1.0, "unidad": "mg/dL", "referencia": "0.7-1.3" },
+        "bun": { "valor": 15, "unidad": "mg/dL", "referencia": "7-20" },
+        "ast": { "valor": 25, "unidad": "U/L", "referencia": "5-40" },
+        "alt": { "valor": 28, "unidad": "U/L", "referencia": "7-56" }
+      },
+      "interpretacion": "Función hepática y renal normales - Apto para procedimiento"
+    },
+    {
+      "paciente": {
+        "cedula": "8-600-8901",
+        "nombre": "Sofía Valentina Cruz"
+      },
+      "examen": {
+        "tipo": "otro",
+        "nombre": "Espirometría",
+        "fecha_orden": "2026-02-08",
+        "fecha_completado": "2026-02-09"
+      },
+      "estado": "completado",
+      "prioridad": "normal",
+      "resultados": {
+        "fev1": { "valor": 85, "unidad": "%", "referencia": ">80" },
+        "fvc": { "valor": 92, "unidad": "%", "referencia": ">80" },
+        "fev1_fvc": { "valor": 0.82, "unidad": "", "referencia": ">0.70" }
+      },
+      "interpretacion": "Asma leve controlada - Continuar tratamiento actual"
+    }
+  ]
+}

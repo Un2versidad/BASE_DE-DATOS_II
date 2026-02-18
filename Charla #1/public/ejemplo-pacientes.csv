@@ -1,0 +1,11 @@
+cedula,nombre,email,telefono,direccion,fecha_nacimiento,tipo_sangre,genero,alergias,condiciones,notas
+8-888-1234,María Elena Rodríguez,maria.rodriguez@email.com,+507 6234-5678,Calle 50 Este Bella Vista,1985-03-15,O+,femenino,Penicilina,Hipertensión arterial,Control mensual
+8-777-5678,Carlos Alberto Pérez,carlos.perez@email.com,+507 6345-6789,Av. Balboa Punta Pacífica,1972-07-22,A+,masculino,Ninguna conocida,Diabetes tipo 2,Seguimiento trimestral
+8-999-9012,Ana Sofía Martínez,ana.martinez@email.com,+507 6456-7890,Vía Argentina El Cangrejo,1990-11-08,B+,femenino,,Asma leve,Primera consulta cardiología
+8-666-3456,Roberto José González,roberto.gonzalez@email.com,+507 6567-8901,Costa del Este Ciudad del Saber,1968-05-30,AB+,masculino,Aspirina y Sulfas,Cardiopatía hipertensiva,Paciente de alto riesgo
+8-555-7890,Laura Patricia Sánchez,laura.sanchez@email.com,+507 6678-9012,Calle Uruguay Marbella,1995-09-12,O-,femenino,Mariscos,,Control prenatal
+8-444-2345,José Miguel Herrera,jose.herrera@email.com,+507 6789-0123,San Francisco Torres del Pacífico,1980-12-25,A-,masculino,,Post-infarto,Recuperación satisfactoria
+8-333-6789,Diana Carolina López,diana.lopez@email.com,+507 6890-1234,Obarrio Calle 52,1988-04-18,B-,femenino,Látex,Psoriasis,Terapia biológica activa
+8-222-0123,Fernando Luis Castillo,fernando.castillo@email.com,+507 6901-2345,El Dorado Edificio Luxor,1975-08-07,O+,masculino,,Migrañas crónicas,Estudios pendientes
+8-111-4567,Patricia Isabel Moreno,patricia.moreno@email.com,+507 6012-3456,Betania Residencial,1992-02-14,A+,femenino,Ibuprofeno,Hipotiroidismo,Ajuste de medicación
+8-100-8901,Andrés Felipe Díaz,andres.diaz@email.com,+507 6123-4567,Clayton Ciudad del Saber,1965-10-03,AB-,masculino,Ninguna,Hiperplasia prostática,Consulta inicial
