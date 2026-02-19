@@ -5,7 +5,7 @@ import { encryptData, deriveKey } from '@/lib/encryption'
 
 export async function POST(request: NextRequest) {
     try {
-        // Verify doctor authentication
+        // Verificar la autenticación del médico
         const authHeader = request.headers.get('Authorization')
         if (!authHeader || !authHeader.startsWith('Bearer ')) {
             return NextResponse.json(
@@ -28,7 +28,7 @@ export async function POST(request: NextRequest) {
         const body = await request.json()
         const { patientId, examType, examName, resultValue, notes, isAbnormal } = body
 
-        // Validate required fields
+        // Validar campos obligatorios
         if (!patientId || !examType || !examName || !resultValue) {
             return NextResponse.json(
                 { success: false, error: 'Faltan campos requeridos' },
@@ -40,7 +40,7 @@ export async function POST(request: NextRequest) {
         const secret = process.env.ENCRYPTION_SECRET || 'default-secret-change-in-production'
         const key = await deriveKey(secret)
 
-        // Encrypt the result value and notes
+        // Cifrar el valor del resultado y las notas.
         const encryptedResult = await encryptData(resultValue, key)
         const encryptedNotes = notes ? await encryptData(notes, key) : null
 
@@ -72,7 +72,7 @@ export async function POST(request: NextRequest) {
             )
         }
 
-        // Create notification if result requires follow-up
+        // Crear notificación si el resultado requiere seguimiento.
         if (isAbnormal) {
             await adminClient
                 .from('notificaciones')
@@ -101,3 +101,4 @@ export async function POST(request: NextRequest) {
         )
     }
 }
+
