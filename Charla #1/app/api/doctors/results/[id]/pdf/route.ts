@@ -4,7 +4,7 @@ import { verifyToken } from '@/lib/auth'
 import { decryptData, deriveKey, safeDecrypt } from '@/lib/encryption'
 import { generateLabResultHTML, generateLabResultText, LabResultPDFData, PrescriptionData } from '@/lib/pdf-results'
 
-// GET /api/doctors/results/[id]/pdf - Generate PDF for a lab result
+// GET /api/doctors/results/[id]/pdf: genera un PDF con los resultados de laboratorio.
 export async function GET(
     request: Request,
     { params }: { params: Promise<{ id: string }> }
@@ -14,7 +14,7 @@ export async function GET(
         console.log('[PDF Route] Generating PDF for result:', resultId)
         
         const { searchParams } = new URL(request.url)
-        const format = searchParams.get('format') || 'html' // 'html' or 'text'
+        const format = searchParams.get('format') || 'html' // 'html' o 'text'
 
         const authHeader = request.headers.get('authorization')
         const token = authHeader?.replace('Bearer ', '')
@@ -41,7 +41,7 @@ export async function GET(
 
         const adminClient = createAdminClient()
 
-        // Get the result with related data
+        // Obtener el resultado con los datos relacionados
         const { data: result, error: resultError } = await adminClient
             .from('resultados_laboratorio')
             .select(`
@@ -81,7 +81,7 @@ export async function GET(
             )
         }
 
-        // Decrypt data
+        // Descifrar datos
         const secret = process.env.ENCRYPTION_SECRET || 'default-secret-change-in-production'
         const key = await deriveKey(secret)
 
@@ -113,13 +113,13 @@ export async function GET(
             console.error('Error decrypting reviewing doctor name:', e)
         }
 
-        // Parse results if stored as JSON
+        // Analizar los resultados si están almacenados como JSON.
         let resultsData: LabResultPDFData['results'] = []
         try {
             if (result.valores_referencia) {
                 resultsData = result.valores_referencia
             } else {
-                // Create placeholder data if no detailed results
+                // Crear datos provisionales si no hay resultados detallados.
                 resultsData = [{
                     parameter: result.nombre_examen,
                     value: result.resultados_cifrados ? 'Ver detalles' : 'Pendiente',
@@ -132,7 +132,7 @@ export async function GET(
             console.error('Error parsing results:', e)
         }
 
-        // Fetch active prescriptions for this patient from this doctor
+        // Obtener las recetas activas de este paciente de este médico.
         let prescriptions: PrescriptionData[] = []
         try {
             const { data: rxData } = await adminClient
@@ -160,7 +160,7 @@ export async function GET(
             console.error('Error fetching prescriptions:', e)
         }
 
-        // Format dates
+        // Formato de fechas
         const formatDate = (dateStr: string | null) => {
             if (!dateStr) return 'N/A'
             return new Date(dateStr).toLocaleDateString('es-ES', {
@@ -179,7 +179,7 @@ export async function GET(
             otro: 'Otro'
         }
 
-        // Decrypt date of birth and access code
+        // Descifrar la fecha de nacimiento y el código de acceso.
         const dateOfBirth = await safeDecrypt(result.pacientes?.fecha_nacimiento, key)
         const decryptedAccessCode = await safeDecrypt(result.codigo_acceso, key) || 
             await safeDecrypt(result.pacientes?.codigo_acceso, key) || 
@@ -203,7 +203,7 @@ export async function GET(
         }
 
         if (format === 'text') {
-            // Return plain text
+            // Devuelve texto sin formato
             const text = generateLabResultText(pdfData)
             return new NextResponse(text, {
                 headers: {
@@ -213,7 +213,7 @@ export async function GET(
             })
         }
 
-        // Return HTML (can be printed as PDF from browser)
+        // Devuelve HTML (se puede imprimir como PDF desde el navegador)
         const html = generateLabResultHTML(pdfData)
         return new NextResponse(html, {
             headers: {
@@ -229,3 +229,4 @@ export async function GET(
         )
     }
 }
+
