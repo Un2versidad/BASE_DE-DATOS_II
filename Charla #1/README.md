@@ -1,10 +1,18 @@
 <img width="1129" height="421" alt="image" src="https://github.com/user-attachments/assets/3331926b-aec7-4eb6-afa2-1e93ea69635c" />
 
-[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/Un2versidad/BASE_DE-DATOS_II)
 # MedComLabs — Gestión Moderna de ETL y Cifrado de Base de Datos
+<p align="left">
+  <img src="https://img.shields.io/badge/Next.js-16-black?logo=nextdotjs&logoColor=white" />
+  <img src="https://img.shields.io/badge/React-19-20232A?logo=react&logoColor=61DAFB" />
+  <img src="https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript&logoColor=white" />
+  <img src="https://img.shields.io/badge/Tailwind_CSS-4-38B2AC?logo=tailwindcss&logoColor=white" />
+  <img src="https://img.shields.io/badge/shadcn/ui-latest-black" />
+  <a href="https://deepwiki.com/Un2versidad/BASE_DE-DATOS_II">
+    <img src="https://deepwiki.com/badge.svg" />
+  </a>
+</p>
 
 > Plataforma hospitalaria con ETL avanzado y cifrado AES-256-GCM de extremo a extremo
----
 
 ## Descripción General
 
