@@ -3,17 +3,17 @@ import { createAdminClient } from '@/lib/supabase/server'
 import { withAuth } from '@/lib/auth-middleware'
 import { decryptData, deriveKey, safeDecrypt } from '@/lib/encryption'
 
-// Helper to decrypt field or extract from placeholder format
+// Helper para descifrar campos o extraer datos del formato del marcador de posición.
 async function decryptField(encrypted: string | null, iv: string | null, key: CryptoKey): Promise<string | null> {
     if (!encrypted || !iv) return null
     
-    // Check for placeholder/demo data format (enc_value)
+    // Verificar el formato de los datos de marcador de posición/demostración (enc_value)
     if (encrypted.startsWith('enc_')) {
-        // Return decoded placeholder: "enc_Dra_Maria_Garcia" -> "Dra. María García"
+        // Devuelve el marcador de posición decodificado: «enc_Dra_Maria_Garcia» -> «Dra. María García»
         return encrypted
             .replace('enc_', '')
             .replace(/_/g, ' ')
-            .replace('@', '@') // Keep email format
+            .replace('@', '@') // Mantener el formato del correo electrónico
     }
     
     try {
@@ -38,7 +38,6 @@ async function handleGet(request: NextRequest) {
 
         if (error) throw error
 
-        // Decrypt and map Spanish column names to English for frontend compatibility
         const mappedDoctors = await Promise.all((data || []).map(async doc => ({
             id: doc.id,
             name: await decryptField(doc.nombre_cifrado, doc.nombre_iv, key),
