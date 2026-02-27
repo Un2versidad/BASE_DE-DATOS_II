@@ -1,6 +1,4 @@
--- ============================================================
 -- CASO 1: Sistema Empresarial de Servicios Digitales
--- ============================================================
 
 USE servicios_digitales;
 
@@ -105,7 +103,7 @@ WHERE id_usuario = (SELECT id_usuario FROM usuarios WHERE email = 'pedro.hernand
 -- el historial de auditoría, lo cual es crítico para cumplimiento legal.
 -- ============================================================
 
--- ELIMINACIÓN LÓGICA (recomendada - preserva historial)
+-- ELIMINACIÓN ( preserva historial)
 UPDATE usuarios
 SET estado = 'inactivo', es_activo = 0
 WHERE email = 'fernando.vargas@nuevaempresa.com';
