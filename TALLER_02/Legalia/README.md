@@ -1,3 +1,5 @@
+<img width="1107" height="243" alt="image" src="https://github.com/user-attachments/assets/67bde022-8ce0-4633-8304-5c2a944a4f75" />
+
 # Legalia - Sistema de Gestion de Expedientes
 
 Sistema web para gestion de expedientes legales, agenda diaria y administracion de aseguradoras y juzgados.
