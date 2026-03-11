@@ -4,6 +4,12 @@
 
 Sistema web para gestion de expedientes legales, agenda diaria y administracion de aseguradoras y juzgados.
 
+## Screenshot
+
+<img width="400" height="400" alt="image" src="https://github.com/user-attachments/assets/9a6427f9-317d-4ed0-ab3a-25e788450a95" />
+
+<img width="410" height="410" alt="image" src="https://github.com/user-attachments/assets/14fbfa66-b262-42e1-b4bf-a7aef108c3f8" />
+
 ## Requisitos
 
 - Docker Desktop
