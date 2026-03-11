@@ -1,0 +1,10 @@
+flask
+pymysql
+python-dotenv
+flask-cors
+flask-limiter
+flask-talisman
+flasgger
+argon2-cffi
+pyjwt
+uuid6

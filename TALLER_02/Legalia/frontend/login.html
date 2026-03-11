@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Legalia - Login</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <script>
+      window.__API_BASE__ = "http://localhost:5001";
+    </script>
+    <script>
+      if (localStorage.getItem("access_token")) {
+        window.location = "index.html";
+      }
+    </script>
+  </head>
+  <body class="login-page">
+    <div class="login-card">
+      <h1 class="login-title" id="login-title">INGRESAR A CUENTA</h1>
+      <label class="sr-only" for="user">Usuario</label>
+      <input
+        id="user"
+        class="login-input"
+        type="text"
+        placeholder="Usuario"
+        autocomplete="username"
+        maxlength="50"
+      />
+      <label class="sr-only" for="pass">Contrasena</label>
+      <input
+        id="pass"
+        class="login-input"
+        type="password"
+        placeholder="Contrasena"
+        autocomplete="current-password"
+        maxlength="72"
+      />
+      <button id="login-btn" class="login-button" aria-labelledby="login-title">INGRESAR A CUENTA</button>
+      <div id="login-error" class="login-error" role="alert"></div>
+      <div class="login-forgot">OLVIDASTE TU CONTRASE&Ntilde;A</div>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script>
+      const button = document.getElementById("login-btn");
+      const userInput = document.getElementById("user");
+      const passInput = document.getElementById("pass");
+      const errorBox = document.getElementById("login-error");
+
+      async function handleLogin() {
+        const username = userInput.value.trim();
+        const password = passInput.value;
+        errorBox.textContent = "";
+        const result = await login(username, password);
+        if (result && result.access_token) {
+          window.location = "index.html";
+          return;
+        }
+        errorBox.textContent = "Credenciales invalidas";
+      }
+
+      button.addEventListener("click", handleLogin);
+      passInput.addEventListener("keydown", (event) => {
+        if (event.key === "Enter") {
+          handleLogin();
+        }
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,469 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Legalia - Agenda</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css"
+    />
+    <script>
+      window.__API_BASE__ = "http://localhost:5001";
+    </script>
+    <script>
+      if (!localStorage.getItem("access_token")) {
+        window.location = "login.html";
+      }
+    </script>
+  </head>
+  <body class="dashboard-page">
+    <div class="layout">
+      <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+          <div class="brand">LEGALIA</div>
+          <button class="sidebar-close" id="sidebar-close" aria-label="Cerrar menu">&times;</button>
+        </div>
+        <div class="nav-section">
+          <a class="nav-item" href="#">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M3 12l9-9 9 9" />
+              <path d="M9 21V9h6v12" />
+            </svg>
+            Inicio
+          </a>
+          <a class="nav-item modal-trigger" href="#" data-modal-target="modal-expediente">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M4 4h10v16H4z" />
+              <path d="M14 8h6v12h-6z" />
+            </svg>
+            Expedientes
+          </a>
+          <a class="nav-item modal-trigger" href="#" data-modal-target="modal-reportes">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M4 4h16v16H4z" />
+              <path d="M4 9h16" />
+            </svg>
+            Reportes
+          </a>
+        </div>
+
+        <div class="nav-title">Configuraci&oacute;n</div>
+        <div class="nav-section">
+          <a class="nav-item modal-trigger" href="#" data-modal-target="modal-aseguradora">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M4 6h16" />
+              <path d="M4 12h16" />
+              <path d="M4 18h16" />
+            </svg>
+            Aseguradora
+          </a>
+          <a class="nav-item" href="#">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="8" r="4" />
+              <path d="M4 22c2-4 6-6 8-6s6 2 8 6" />
+            </svg>
+            Usuarios
+          </a>
+          <a class="nav-item modal-trigger" href="#" data-modal-target="modal-juzgado">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M3 21h18" />
+              <path d="M6 21V7h12v14" />
+              <path d="M9 7V3h6v4" />
+            </svg>
+            Juzgado
+          </a>
+        </div>
+      </aside>
+
+      <main class="content">
+        <div class="topbar">
+          <button class="menu-icon" id="sidebar-toggle" aria-label="Menu">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M4 6h16" />
+              <path d="M4 12h16" />
+              <path d="M4 18h16" />
+            </svg>
+          </button>
+          <div class="user">
+            <span id="user-name">Lic. Juan P&eacute;rez</span>
+            <a href="#" class="logout" id="logout-btn" aria-label="Salir">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M10 17l5-5-5-5" />
+                <path d="M4 12h11" />
+                <path d="M15 4h5v16h-5" />
+              </svg>
+              Salir
+            </a>
+          </div>
+        </div>
+
+        <div class="main">
+          <h1 class="heading">Agenda del d&iacute;a</h1>
+          <div class="subheading" id="agenda-date">Martes 7 de enero de 2019</div>
+
+          <div class="dashboard-grid">
+            <div class="agenda-card">
+              <div class="table-scroll" role="region" aria-label="Agenda del dia">
+                <table class="agenda-table">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>ASEGURADORA</th>
+                      <th>ASEGURADO</th>
+                      <th>JUZGADO</th>
+                    </tr>
+                  </thead>
+                  <tbody id="agenda-body" aria-live="polite"></tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="calendar">
+              <div id="fc-calendar"></div>
+            </div>
+          </div>
+
+          <div class="summary-row">
+            <div class="summary-card pending">
+              <svg viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="3" width="14" height="14" rx="2" />
+                <rect x="7" y="7" width="14" height="14" rx="2" />
+              </svg>
+              <div>
+                <div class="label">Pendientes</div>
+                <div class="count" id="count-pendiente">0</div>
+              </div>
+            </div>
+            <div class="summary-card progress">
+              <svg viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M4 4h10v10H4z" />
+                <path d="M14 10l6 6" />
+                <path d="M14 16h6v6h-6z" />
+              </svg>
+              <div>
+                <div class="label">En curso</div>
+                <div class="count" id="count-curso">0</div>
+              </div>
+            </div>
+            <div class="summary-card closed">
+              <svg viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="6" y="3" width="12" height="18" rx="2" />
+                <path d="M9 7h6" />
+                <path d="M9 11h6" />
+              </svg>
+              <div>
+                <div class="label">Cerrados</div>
+                <div class="count" id="count-cerrado">0</div>
+              </div>
+            </div>
+          </div>
+
+          <div style="height: 1px;"></div>
+        </div>
+      </main>
+    </div>
+
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
+    <button class="fab" id="fab-btn" aria-label="Crear expediente">+</button>
+
+    <div class="modal" id="modal-expediente" role="dialog" aria-modal="true" aria-labelledby="modal-expediente-title">
+      <div class="modal-card" tabindex="-1">
+        <div class="modal-header">
+          <h2 id="modal-expediente-title">Nuevo expediente</h2>
+          <button class="modal-close" data-modal-close aria-label="Cerrar">&times;</button>
+        </div>
+        <form id="expediente-form" class="form-grid">
+          <input id="expediente-id" type="hidden" />
+          <div class="form-group">
+            <label for="expediente-aseguradora">Aseguradora</label>
+            <select id="expediente-aseguradora" class="form-input" required></select>
+          </div>
+          <div class="form-group">
+            <label for="expediente-juzgado">Juzgado</label>
+            <select id="expediente-juzgado" class="form-input" required></select>
+          </div>
+          <div class="form-group">
+            <label for="expediente-abogado">Abogado</label>
+          <input
+            id="expediente-abogado"
+            class="form-input"
+            type="text"
+            placeholder="Nombre del abogado"
+            maxlength="100"
+            required
+          />
+          </div>
+          <div class="form-group">
+            <label for="expediente-estado">Estado</label>
+            <select id="expediente-estado" class="form-input">
+              <option value="Pendiente">Pendiente</option>
+              <option value="En curso">En curso</option>
+              <option value="Cerrado">Cerrado</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="expediente-fecha">Fecha</label>
+          <input id="expediente-fecha" class="form-input" type="date" required />
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary" id="expediente-submit">Guardar expediente</button>
+            <button type="button" class="btn btn-ghost" id="expediente-cancel" style="margin-left: 8px;">Cancelar</button>
+          </div>
+        </form>
+        <div class="modal-list">
+          <div class="modal-list-title">Expedientes recientes</div>
+          <div class="table-scroll">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Abogado</th>
+                  <th>Estado</th>
+                  <th>Fecha</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="expedientes-table"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal" id="modal-aseguradora" role="dialog" aria-modal="true" aria-labelledby="modal-aseguradora-title">
+      <div class="modal-card" tabindex="-1">
+        <div class="modal-header">
+          <h2 id="modal-aseguradora-title">Aseguradoras</h2>
+          <button class="modal-close" data-modal-close aria-label="Cerrar">&times;</button>
+        </div>
+        <form id="aseguradora-form" class="form-inline">
+          <input id="aseguradora-id" type="hidden" />
+          <label class="sr-only" for="aseguradora-nombre">Nombre de aseguradora</label>
+          <input
+            id="aseguradora-nombre"
+            class="form-input"
+            type="text"
+            placeholder="Nombre de aseguradora"
+            maxlength="100"
+            required
+          />
+          <button type="submit" class="btn btn-primary" id="aseguradora-submit">Agregar</button>
+          <button type="button" class="btn btn-ghost" id="aseguradora-cancel">Cancelar</button>
+        </form>
+        <div class="table-scroll">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="aseguradoras-table"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal" id="modal-juzgado" role="dialog" aria-modal="true" aria-labelledby="modal-juzgado-title">
+      <div class="modal-card" tabindex="-1">
+        <div class="modal-header">
+          <h2 id="modal-juzgado-title">Juzgados</h2>
+          <button class="modal-close" data-modal-close aria-label="Cerrar">&times;</button>
+        </div>
+        <form id="juzgado-form" class="form-inline">
+          <input id="juzgado-id" type="hidden" />
+          <label class="sr-only" for="juzgado-nombre">Nombre de juzgado</label>
+          <input
+            id="juzgado-nombre"
+            class="form-input"
+            type="text"
+            placeholder="Nombre de juzgado"
+            maxlength="100"
+            required
+          />
+          <button type="submit" class="btn btn-primary" id="juzgado-submit">Agregar</button>
+          <button type="button" class="btn btn-ghost" id="juzgado-cancel">Cancelar</button>
+        </form>
+        <div class="table-scroll">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="juzgados-table"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal" id="modal-expediente-edit" role="dialog" aria-modal="true" aria-labelledby="modal-expediente-edit-title">
+      <div class="modal-card" tabindex="-1">
+        <div class="modal-header">
+          <div>
+            <h2 id="modal-expediente-edit-title">Editar expediente</h2>
+            <div class="modal-subtitle" id="expediente-edit-id"></div>
+          </div>
+          <button class="modal-close" data-modal-close aria-label="Cerrar">&times;</button>
+        </div>
+        <form id="expediente-edit-form" class="form-grid">
+          <input id="expediente-edit-id-input" type="hidden" />
+          <div class="form-group">
+            <label for="expediente-edit-aseguradora">Aseguradora</label>
+            <select id="expediente-edit-aseguradora" class="form-input" required></select>
+          </div>
+          <div class="form-group">
+            <label for="expediente-edit-juzgado">Juzgado</label>
+            <select id="expediente-edit-juzgado" class="form-input" required></select>
+          </div>
+          <div class="form-group">
+            <label for="expediente-edit-abogado">Abogado</label>
+            <input
+              id="expediente-edit-abogado"
+              class="form-input"
+              type="text"
+              placeholder="Nombre del abogado"
+              maxlength="100"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="expediente-edit-estado">Estado</label>
+            <select id="expediente-edit-estado" class="form-input">
+              <option value="Pendiente">Pendiente</option>
+              <option value="En curso">En curso</option>
+              <option value="Cerrado">Cerrado</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="expediente-edit-fecha">Fecha</label>
+            <input id="expediente-edit-fecha" class="form-input" type="date" required />
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary" id="expediente-edit-submit">Guardar cambios</button>
+            <button type="button" class="btn btn-ghost" id="expediente-edit-cancel" style="margin-left: 8px;">Cancelar</button>
+            <button type="button" class="btn btn-danger" id="expediente-edit-delete" style="margin-left: 8px;">Eliminar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="modal" id="modal-aseguradora-edit" role="dialog" aria-modal="true" aria-labelledby="modal-aseguradora-edit-title">
+      <div class="modal-card compact" tabindex="-1">
+        <div class="modal-header">
+          <div>
+            <h2 id="modal-aseguradora-edit-title">Editar aseguradora</h2>
+            <div class="modal-subtitle" id="aseguradora-edit-id"></div>
+          </div>
+          <button class="modal-close" data-modal-close aria-label="Cerrar">&times;</button>
+        </div>
+        <form id="aseguradora-edit-form" class="form-inline">
+          <input id="aseguradora-edit-id-input" type="hidden" />
+          <label class="sr-only" for="aseguradora-edit-nombre">Nombre de aseguradora</label>
+          <input
+            id="aseguradora-edit-nombre"
+            class="form-input"
+            type="text"
+            placeholder="Nombre de aseguradora"
+            maxlength="100"
+            required
+          />
+          <button type="submit" class="btn btn-primary">Guardar cambios</button>
+          <button type="button" class="btn btn-ghost" id="aseguradora-edit-cancel">Cancelar</button>
+          <button type="button" class="btn btn-danger" id="aseguradora-edit-delete">Eliminar</button>
+        </form>
+      </div>
+    </div>
+
+    <div class="modal" id="modal-juzgado-edit" role="dialog" aria-modal="true" aria-labelledby="modal-juzgado-edit-title">
+      <div class="modal-card compact" tabindex="-1">
+        <div class="modal-header">
+          <div>
+            <h2 id="modal-juzgado-edit-title">Editar juzgado</h2>
+            <div class="modal-subtitle" id="juzgado-edit-id"></div>
+          </div>
+          <button class="modal-close" data-modal-close aria-label="Cerrar">&times;</button>
+        </div>
+        <form id="juzgado-edit-form" class="form-inline">
+          <input id="juzgado-edit-id-input" type="hidden" />
+          <label class="sr-only" for="juzgado-edit-nombre">Nombre de juzgado</label>
+          <input
+            id="juzgado-edit-nombre"
+            class="form-input"
+            type="text"
+            placeholder="Nombre de juzgado"
+            maxlength="100"
+            required
+          />
+          <button type="submit" class="btn btn-primary">Guardar cambios</button>
+          <button type="button" class="btn btn-ghost" id="juzgado-edit-cancel">Cancelar</button>
+          <button type="button" class="btn btn-danger" id="juzgado-edit-delete">Eliminar</button>
+        </form>
+      </div>
+    </div>
+
+    <div class="modal" id="modal-reportes" role="dialog" aria-modal="true" aria-labelledby="modal-reportes-title">
+      <div class="modal-card" tabindex="-1">
+        <div class="modal-header">
+          <h2 id="modal-reportes-title">Reportes</h2>
+          <button class="modal-close" data-modal-close aria-label="Cerrar">&times;</button>
+        </div>
+        <div class="metrics-card" style="margin-top: 0;">
+          <div class="metrics-header">
+            <div>
+              <div class="metrics-title">Distribucion por estado</div>
+              <div class="metrics-subtitle">Resumen general</div>
+            </div>
+          </div>
+          <canvas id="reportStatusChart" height="140"></canvas>
+        </div>
+        <div class="modal-list" style="margin-top: 18px;">
+          <div class="modal-list-title">Top aseguradoras</div>
+          <div class="table-scroll">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Aseguradora</th>
+                  <th>Total</th>
+                </tr>
+              </thead>
+              <tbody id="report-aseguradoras-table"></tbody>
+            </table>
+          </div>
+        </div>
+        <div class="modal-list" style="margin-top: 18px;">
+          <div class="modal-list-title">Top juzgados</div>
+          <div class="table-scroll">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Juzgado</th>
+                  <th>Total</th>
+                </tr>
+              </thead>
+              <tbody id="report-juzgados-table"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="toast-container" id="toast-container" aria-live="polite"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tippy.js@6.3.7/dist/tippy-bundle.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/app.js"></script>
+  </body>
+</html>
