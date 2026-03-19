@@ -1,0 +1,54 @@
+services:
+  mariadb:
+    image: mariadb:11.4
+    container_name: api_proveedores_mariadb
+    restart: unless-stopped
+    environment:
+      MARIADB_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWORD:-root123}
+      MARIADB_DATABASE: ${MARIADB_DATABASE:-proveedores_db}
+      MARIADB_USER: ${MARIADB_USER:-app_user}
+      MARIADB_PASSWORD: ${MARIADB_PASSWORD:-app_password}
+    ports:
+      - "${MARIADB_HOST_PORT:-3307}:3306"
+    volumes:
+      - mariadb_data:/var/lib/mysql
+      - ./sql/01_schema_proveedores.sql:/docker-entrypoint-initdb.d/01_schema_proveedores.sql:ro
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "mariadb-admin ping -h 127.0.0.1 -u root --password=$$MARIADB_ROOT_PASSWORD --silent",
+        ]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 20s
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: api_proveedores_flask
+    restart: unless-stopped
+    depends_on:
+      mariadb:
+        condition: service_healthy
+    environment:
+      FLASK_ENV: production
+      PORT: 3000
+      DB_HOST: mariadb
+      DB_PORT: 3306
+      DB_USER: ${MARIADB_USER:-app_user}
+      DB_PASSWORD: ${MARIADB_PASSWORD:-app_password}
+      DB_NAME: ${MARIADB_DATABASE:-proveedores_db}
+      DB_POOL_LIMIT: 10
+      JWT_SECRET: ${JWT_SECRET:-supersecreto_cambiar}
+      JWT_EXPIRES_MINUTES: ${JWT_EXPIRES_MINUTES:-120}
+      API_USER: ${API_USER:-admin}
+      API_PASSWORD: ${API_PASSWORD:-123456}
+    ports:
+      - "${API_HOST_PORT:-3000}:3000"
+
+volumes:
+  mariadb_data:
+

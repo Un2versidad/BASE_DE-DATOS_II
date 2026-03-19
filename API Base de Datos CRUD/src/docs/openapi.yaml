@@ -1,0 +1,237 @@
+openapi: 3.0.3
+info:
+  title: API CRUD Proveedores con JWT
+  version: 1.1.0
+  description: API REST para gestion de proveedores con rutas publicas y rutas protegidas por JWT Bearer.
+servers:
+  - url: http://localhost:3000
+    description: Local
+tags:
+  - name: Auth
+    description: Autenticacion JWT
+  - name: Proveedores
+    description: Operaciones CRUD publicas
+  - name: Proveedores Secure
+    description: Operaciones CRUD protegidas con JWT
+paths:
+  /health:
+    get:
+      summary: Verificar estado de API y base de datos
+      responses:
+        "200":
+          description: Sistema operativo
+        "503":
+          description: Sin conexion a base de datos
+  /api/v1/auth/login:
+    post:
+      tags: [Auth]
+      summary: Generar token JWT
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [username, password]
+              properties:
+                username:
+                  type: string
+                  example: admin
+                password:
+                  type: string
+                  example: "123456"
+      responses:
+        "200":
+          description: Token generado
+        "401":
+          description: Credenciales invalidas
+  /api/v1/auth/me:
+    get:
+      tags: [Auth]
+      summary: Validar token y obtener datos del usuario autenticado
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Token valido
+        "401":
+          description: Token faltante, invalido o expirado
+  /api/v1/proveedores:
+    get:
+      tags: [Proveedores]
+      summary: Listar todos los proveedores (publico)
+      responses:
+        "200":
+          description: Lista obtenida correctamente
+    post:
+      tags: [Proveedores]
+      summary: Crear proveedor (publico)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProveedorInput"
+      responses:
+        "201":
+          description: Proveedor creado
+        "400":
+          description: Validacion incorrecta
+        "409":
+          description: RUC duplicado
+  /api/v1/proveedores/{id}:
+    get:
+      tags: [Proveedores]
+      summary: Obtener proveedor por ID (publico)
+      parameters:
+        - $ref: "#/components/parameters/ProveedorId"
+      responses:
+        "200":
+          description: Proveedor encontrado
+        "404":
+          description: No encontrado
+    put:
+      tags: [Proveedores]
+      summary: Actualizar proveedor por ID (publico)
+      parameters:
+        - $ref: "#/components/parameters/ProveedorId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProveedorInput"
+      responses:
+        "200":
+          description: Proveedor actualizado
+        "400":
+          description: Validacion incorrecta
+        "404":
+          description: No encontrado
+    delete:
+      tags: [Proveedores]
+      summary: Eliminar proveedor por ID (publico)
+      parameters:
+        - $ref: "#/components/parameters/ProveedorId"
+      responses:
+        "200":
+          description: Proveedor eliminado
+        "404":
+          description: No encontrado
+  /api/v1/secure/proveedores:
+    get:
+      tags: [Proveedores Secure]
+      summary: Listar proveedores (protegido)
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Lista obtenida correctamente
+        "401":
+          description: No autorizado
+    post:
+      tags: [Proveedores Secure]
+      summary: Crear proveedor (protegido)
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProveedorInput"
+      responses:
+        "201":
+          description: Proveedor creado
+        "401":
+          description: No autorizado
+  /api/v1/secure/proveedores/{id}:
+    get:
+      tags: [Proveedores Secure]
+      summary: Obtener proveedor por ID (protegido)
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/ProveedorId"
+      responses:
+        "200":
+          description: Proveedor encontrado
+        "401":
+          description: No autorizado
+        "404":
+          description: No encontrado
+    put:
+      tags: [Proveedores Secure]
+      summary: Actualizar proveedor por ID (protegido)
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/ProveedorId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProveedorInput"
+      responses:
+        "200":
+          description: Proveedor actualizado
+        "401":
+          description: No autorizado
+        "404":
+          description: No encontrado
+    delete:
+      tags: [Proveedores Secure]
+      summary: Eliminar proveedor por ID (protegido)
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/ProveedorId"
+      responses:
+        "200":
+          description: Proveedor eliminado
+        "401":
+          description: No autorizado
+        "404":
+          description: No encontrado
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  parameters:
+    ProveedorId:
+      in: path
+      name: id
+      required: true
+      schema:
+        type: integer
+        minimum: 1
+      description: ID del proveedor
+  schemas:
+    ProveedorInput:
+      type: object
+      required: [nombre, ruc]
+      properties:
+        nombre:
+          type: string
+          example: Distribuidora Central S.A.
+        ruc:
+          type: string
+          example: 1550123-1-12345
+        telefono:
+          type: string
+          example: "+50760000000"
+        email:
+          type: string
+          format: email
+          example: compras@distribuidoracentral.com
+        direccion:
+          type: string
+          example: Avenida Principal, Ciudad de Panama
+        estado:
+          type: string
+          enum: [ACTIVO, INACTIVO]
+          default: ACTIVO
+

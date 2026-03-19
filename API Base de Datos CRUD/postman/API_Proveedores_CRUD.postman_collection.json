@@ -1,0 +1,299 @@
+{
+  "info": {
+    "_postman_id": "2b5fd5e4-351a-4e8a-9fe9-62ca2d9ff4fe",
+    "name": "API Proveedores CRUD + JWT",
+    "description": "Coleccion para probar autenticacion JWT (Bearer) y CRUD protegido de proveedores.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1 - Health Check",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code 200 o 503', function () {",
+              "    pm.expect(pm.response.code).to.be.oneOf([200, 503]);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/health"
+      },
+      "response": []
+    },
+    {
+      "name": "2 - Login JWT (POST)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code es 200', function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "const body = pm.response.json();",
+              "pm.test('Respuesta contiene access_token', function () {",
+              "    pm.expect(body).to.have.property('access_token');",
+              "});",
+              "",
+              "pm.environment.set('accessToken', body.access_token);"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"username\": \"{{apiUser}}\",\n  \"password\": \"{{apiPassword}}\"\n}"
+        },
+        "url": "{{baseUrl}}/api/v1/auth/login"
+      },
+      "response": []
+    },
+    {
+      "name": "3 - Validar token (GET /auth/me)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code es 200', function () {",
+              "    pm.response.to.have.status(200);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{accessToken}}"
+          }
+        ],
+        "url": "{{baseUrl}}/api/v1/auth/me"
+      },
+      "response": []
+    },
+    {
+      "name": "4 - SECURE CREATE proveedor (POST)",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              "pm.environment.set('proveedorRuc', '1550123-1-' + Date.now());"
+            ],
+            "type": "text/javascript"
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code es 201', function () {",
+              "    pm.response.to.have.status(201);",
+              "});",
+              "",
+              "const body = pm.response.json();",
+              "pm.environment.set('proveedorId', body.data.id);",
+              "pm.test('Respuesta incluye id', function () {",
+              "    pm.expect(body.data).to.have.property('id');",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{accessToken}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nombre\": \"Proveedor JWT\",\n  \"ruc\": \"{{proveedorRuc}}\",\n  \"telefono\": \"+50760007777\",\n  \"email\": \"jwt@proveedores.com\",\n  \"direccion\": \"Panama\",\n  \"estado\": \"ACTIVO\"\n}"
+        },
+        "url": "{{baseUrl}}/api/v1/secure/proveedores"
+      },
+      "response": []
+    },
+    {
+      "name": "5 - SECURE READ todos (GET)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code es 200', function () {",
+              "    pm.response.to.have.status(200);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{accessToken}}"
+          }
+        ],
+        "url": "{{baseUrl}}/api/v1/secure/proveedores"
+      },
+      "response": []
+    },
+    {
+      "name": "6 - SECURE READ por ID (GET)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code es 200', function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "const body = pm.response.json();",
+              "pm.test('ID coincide', function () {",
+              "    pm.expect(body.data.id).to.eql(Number(pm.environment.get('proveedorId')));",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{accessToken}}"
+          }
+        ],
+        "url": "{{baseUrl}}/api/v1/secure/proveedores/{{proveedorId}}"
+      },
+      "response": []
+    },
+    {
+      "name": "7 - SECURE UPDATE proveedor (PUT)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code es 200', function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "const body = pm.response.json();",
+              "pm.test('Nombre actualizado', function () {",
+              "    pm.expect(body.data.nombre).to.eql('Proveedor JWT Editado');",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{accessToken}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nombre\": \"Proveedor JWT Editado\",\n  \"ruc\": \"{{proveedorRuc}}\",\n  \"telefono\": \"+50769998888\",\n  \"email\": \"jwteditado@proveedores.com\",\n  \"direccion\": \"Panama Centro\",\n  \"estado\": \"INACTIVO\"\n}"
+        },
+        "url": "{{baseUrl}}/api/v1/secure/proveedores/{{proveedorId}}"
+      },
+      "response": []
+    },
+    {
+      "name": "8 - SECURE DELETE proveedor (DELETE)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code es 200', function () {",
+              "    pm.response.to.have.status(200);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{accessToken}}"
+          }
+        ],
+        "url": "{{baseUrl}}/api/v1/secure/proveedores/{{proveedorId}}"
+      },
+      "response": []
+    },
+    {
+      "name": "9 - SECURE Validar DELETE (GET 404)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code es 404', function () {",
+              "    pm.response.to.have.status(404);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{accessToken}}"
+          }
+        ],
+        "url": "{{baseUrl}}/api/v1/secure/proveedores/{{proveedorId}}"
+      },
+      "response": []
+    }
+  ]
+}
+
