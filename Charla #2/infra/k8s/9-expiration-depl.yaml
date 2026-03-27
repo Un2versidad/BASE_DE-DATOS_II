@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: expiration-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: expiration
+  template:
+    metadata:
+      labels:
+        app: expiration
+    spec:
+      containers:
+        - name: expiration
+          image: emmann/expiration
+         # imagePullPolicy: Never
+          # resources:
+          #   limits:
+          #     cpu: "1"
+          #     memory: "300Mi"
+          #   requests:
+          #     cpu: "1"
+          #     memory: "200Mi"
+          # resources:
+          #   cpu: 200m
+          #   memory: 0.2Gi
+          # limits:
+          #   cpu: 300m
+          #   memory: 0.3Gi
+          env:
+            - name: RABBITMQ_URL
+              valueFrom:
+                secretKeyRef:
+                  name: rabbitmq-secret
+                  key: RABBITMQ_EXPIRATION_URL
+            - name: RABBITMQ_REQUIRE_TLS
+              value: "true"
+            - name: RABBITMQ_TLS_CA_CERT
+              valueFrom:
+                secretKeyRef:
+                  name: rabbitmq-ca-cert
+                  key: ca.crt
+            - name: NODE_ENV
+              value: "production"
+            - name: REDIS_HOST
+              value: expiration-redis-srv

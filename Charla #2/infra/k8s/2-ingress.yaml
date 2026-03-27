@@ -1,0 +1,82 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-ticket
+  annotations:
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    #nginx.ingress.kubernetes.io/rewrite-target: /$1
+spec:
+  ingressClassName: nginx
+  rules:
+    - http:
+        paths:
+          - path: /api/payments/?(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: payments-srv
+                port:
+                  number: 3000
+          - path: /api/v1/payments/?(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: payments-srv
+                port:
+                  number: 3000
+          - path: /api/users/?(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: auth-srv
+                port:
+                  number: 3000
+          - path: /api/v1/users/?(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: auth-srv
+                port:
+                  number: 3000
+          - path: /api/v1/auth/?(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: auth-srv
+                port:
+                  number: 3000
+          - path: /api/tickets/?(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: tickets-srv
+                port:
+                  number: 3000
+          - path: /api/v1/tickets/?(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: tickets-srv
+                port:
+                  number: 3000
+          - path: /api/orders/?(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: orders-srv
+                port:
+                  number: 3000
+          - path: /api/v1/orders/?(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: orders-srv
+                port:
+                  number: 3000
+          - path: /?(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: client-srv
+                port:
+                  number: 3000

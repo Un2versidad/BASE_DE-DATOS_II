@@ -1,0 +1,66 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: rabbitmq-definitions
+type: Opaque
+stringData:
+  definitions.json: |
+    {
+      "users": [
+        { "name": "app-user", "password": "change-me-strong-pass", "tags": "administrator" },
+        { "name": "tickets-user", "password": "change-me-tickets-pass", "tags": "" },
+        { "name": "orders-user", "password": "change-me-orders-pass", "tags": "" },
+        { "name": "payments-user", "password": "change-me-payments-pass", "tags": "" },
+        { "name": "expiration-user", "password": "change-me-expiration-pass", "tags": "" }
+      ],
+      "vhosts": [
+        { "name": "cinemax" }
+      ],
+      "permissions": [
+        { "user": "app-user", "vhost": "cinemax", "configure": ".*", "write": ".*", "read": ".*" },
+        { "user": "tickets-user", "vhost": "cinemax", "configure": "^(orders|tickets|ticketsOrdersQueueCreate(\\.retry\\.exchange|\\.retry\\.queue|\\.dlx|\\.dlq)?|ticketsOrdersQueueCancel(\\.retry\\.exchange|\\.retry\\.queue|\\.dlx|\\.dlq)?)$", "write": "^(orders|tickets|ticketsOrdersQueueCreate(\\.retry\\.exchange|\\.retry\\.queue|\\.dlx|\\.dlq)?|ticketsOrdersQueueCancel(\\.retry\\.exchange|\\.retry\\.queue|\\.dlx|\\.dlq)?)$", "read": "^(orders|tickets|ticketsOrdersQueueCreate(\\.retry\\.exchange|\\.retry\\.queue|\\.dlx|\\.dlq)?|ticketsOrdersQueueCancel(\\.retry\\.exchange|\\.retry\\.queue|\\.dlx|\\.dlq)?)$" },
+        { "user": "orders-user", "vhost": "cinemax", "configure": "^(orders|tickets|payment|expiration|ticketsCreateQueue(\\.retry\\.exchange|\\.retry\\.queue|\\.dlx|\\.dlq)?|ticketsUpdateQueue(\\.retry\\.exchange|\\.retry\\.queue|\\.dlx|\\.dlq)?|paymentQueueCreate(\\.retry\\.exchange|\\.retry\\.queue|\\.dlx|\\.dlq)?|expirationQueueComplete(\\.retry\\.exchange|\\.retry\\.queue|\\.dlx|\\.dlq)?)$", "write": "^(orders|tickets|payment|expiration|ticketsCreateQueue(\\.retry\\.exchange|\\.retry\\.queue|\\.dlx|\\.dlq)?|ticketsUpdateQueue(\\.retry\\.exchange|\\.retry\\.queue|\\.dlx|\\.dlq)?|paymentQueueCreate(\\.retry\\.exchange|\\.retry\\.queue|\\.dlx|\\.dlq)?|expirationQueueComplete(\\.retry\\.exchange|\\.retry\\.queue|\\.dlx|\\.dlq)?)$", "read": "^(orders|tickets|payment|expiration|ticketsCreateQueue(\\.retry\\.exchange|\\.retry\\.queue|\\.dlx|\\.dlq)?|ticketsUpdateQueue(\\.retry\\.exchange|\\.retry\\.queue|\\.dlx|\\.dlq)?|paymentQueueCreate(\\.retry\\.exchange|\\.retry\\.queue|\\.dlx|\\.dlq)?|expirationQueueComplete(\\.retry\\.exchange|\\.retry\\.queue|\\.dlx|\\.dlq)?)$" },
+        { "user": "payments-user", "vhost": "cinemax", "configure": "^(orders|payment|paymentsOrdersQueueCreate(\\.retry\\.exchange|\\.retry\\.queue|\\.dlx|\\.dlq)?|paymentsOrdersQueueCancel(\\.retry\\.exchange|\\.retry\\.queue|\\.dlx|\\.dlq)?)$", "write": "^(orders|payment|paymentsOrdersQueueCreate(\\.retry\\.exchange|\\.retry\\.queue|\\.dlx|\\.dlq)?|paymentsOrdersQueueCancel(\\.retry\\.exchange|\\.retry\\.queue|\\.dlx|\\.dlq)?)$", "read": "^(orders|payment|paymentsOrdersQueueCreate(\\.retry\\.exchange|\\.retry\\.queue|\\.dlx|\\.dlq)?|paymentsOrdersQueueCancel(\\.retry\\.exchange|\\.retry\\.queue|\\.dlx|\\.dlq)?)$" },
+        { "user": "expiration-user", "vhost": "cinemax", "configure": "^(orders|expiration|expirationOrdersQueueCreate(\\.retry\\.exchange|\\.retry\\.queue|\\.dlx|\\.dlq)?)$", "write": "^(orders|expiration|expirationOrdersQueueCreate(\\.retry\\.exchange|\\.retry\\.queue|\\.dlx|\\.dlq)?)$", "read": "^(orders|expiration|expirationOrdersQueueCreate(\\.retry\\.exchange|\\.retry\\.queue|\\.dlx|\\.dlq)?)$" }
+      ]
+    }
+---
+apiVersion: rabbitmq.com/v1beta1
+kind: RabbitmqCluster
+metadata:
+  name: rabbit-srv
+spec:
+  replicas: 1
+  persistence:
+    storage: 5Gi
+  resources:
+    requests:
+      cpu: 1000m
+      memory: 0.6Gi
+    limits:
+      cpu: 3000m
+      memory: 0.6Gi
+  tls:
+    secretName: rabbitmq-server-tls
+    caSecretName: rabbitmq-ca-cert
+    disableNonTLSListeners: true
+  rabbitmq:
+    additionalConfig: |
+      log.console.level = info
+      channel_max = 1700
+      management.load_definitions = /etc/rabbitmq/definitions.json
+  override:
+    statefulSet:
+      spec:
+        template:
+          spec:
+            volumes:
+              - name: rabbitmq-definitions
+                secret:
+                  secretName: rabbitmq-definitions
+            containers:
+              - name: rabbitmq
+                volumeMounts:
+                  - name: rabbitmq-definitions
+                    mountPath: /etc/rabbitmq/definitions.json
+                    subPath: definitions.json
