@@ -1,0 +1,204 @@
+services:
+  gateway:
+    image: nginx:1.27-alpine
+    depends_on:
+      - client
+      - auth
+      - tickets
+      - orders
+      - payments
+    ports:
+      - "${APP_PORT:-3000}:80"
+    volumes:
+      - ./infra/docker/nginx-compose.conf:/etc/nginx/conf.d/default.conf:ro
+    restart: unless-stopped
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    entrypoint: ["/bin/sh", "/etc/rabbitmq/init/compose-entrypoint.sh"]
+    environment:
+      RABBITMQ_DEFAULT_USER: "${RABBITMQ_MANAGEMENT_USER:-app-user}"
+      RABBITMQ_DEFAULT_PASS: "${RABBITMQ_MANAGEMENT_PASS:-app-password}"
+      RABBITMQ_APP_VHOST: "${RABBITMQ_APP_VHOST:-cinemax}"
+      RABBITMQ_MANAGEMENT_USER: "${RABBITMQ_MANAGEMENT_USER:-app-user}"
+      RABBITMQ_MANAGEMENT_PASS: "${RABBITMQ_MANAGEMENT_PASS:-app-password}"
+      RABBITMQ_TICKETS_USER: "${RABBITMQ_TICKETS_USER:-tickets-user}"
+      RABBITMQ_TICKETS_PASS: "${RABBITMQ_TICKETS_PASS:-tickets-password}"
+      RABBITMQ_ORDERS_USER: "${RABBITMQ_ORDERS_USER:-orders-user}"
+      RABBITMQ_ORDERS_PASS: "${RABBITMQ_ORDERS_PASS:-orders-password}"
+      RABBITMQ_PAYMENTS_USER: "${RABBITMQ_PAYMENTS_USER:-payments-user}"
+      RABBITMQ_PAYMENTS_PASS: "${RABBITMQ_PAYMENTS_PASS:-payments-password}"
+      RABBITMQ_EXPIRATION_USER: "${RABBITMQ_EXPIRATION_USER:-expiration-user}"
+      RABBITMQ_EXPIRATION_PASS: "${RABBITMQ_EXPIRATION_PASS:-expiration-password}"
+    ports:
+      - "${RABBITMQ_PORT:-5672}:5672"
+      - "${RABBITMQ_MANAGEMENT_PORT:-15672}:15672"
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
+      - ./infra/docker/rabbitmq/compose-entrypoint.sh:/etc/rabbitmq/init/compose-entrypoint.sh:ro
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redis-data:/data
+    restart: unless-stopped
+
+  auth-mongo:
+    image: mongo:7
+    volumes:
+      - auth-mongo-data:/data/db
+    restart: unless-stopped
+
+  tickets-mongo:
+    image: mongo:7
+    volumes:
+      - tickets-mongo-data:/data/db
+    restart: unless-stopped
+
+  orders-mongo:
+    image: mongo:7
+    volumes:
+      - orders-mongo-data:/data/db
+    restart: unless-stopped
+
+  payments-mongo:
+    image: mongo:7
+    volumes:
+      - payments-mongo-data:/data/db
+    restart: unless-stopped
+
+  client:
+    build:
+      context: ./client
+    environment:
+      NODE_ENV: development
+      CHOKIDAR_USEPOLLING: "${CHOKIDAR_USEPOLLING:-true}"
+      VITE_HCAPTCHA_SITE_KEY: "${VITE_HCAPTCHA_SITE_KEY:-}"
+      VITE_HCAPTCHA_USE_TEST_KEY: "${VITE_HCAPTCHA_USE_TEST_KEY:-true}"
+    restart: unless-stopped
+
+  auth:
+    build:
+      context: ./auth
+    depends_on:
+      - auth-mongo
+    environment:
+      NODE_ENV: development
+      MONGO_URI: mongodb://auth-mongo:27017/auth
+      JWT_KEY: "${JWT_KEY:-change-me-jwt-key}"
+      ADMIN_EMAIL: "${ADMIN_EMAIL:-fl2on@proton.me}"
+      CLIENT_URL: "${CLIENT_URL:-http://localhost:3000}"
+      ALLOWED_ORIGINS: "${ALLOWED_ORIGINS:-http://localhost:3000,http://127.0.0.1:3000,http://localhost,http://127.0.0.1}"
+      HCAPTCHA_REQUIRED: "${HCAPTCHA_REQUIRED:-true}"
+      HCAPTCHA_USE_TEST_KEY: "${HCAPTCHA_USE_TEST_KEY:-true}"
+      HCAPTCHA_SECRET_KEY: "${HCAPTCHA_SECRET_KEY:-}"
+      AUTH_RATE_LIMIT_ENABLED: "${AUTH_RATE_LIMIT_ENABLED:-true}"
+      AUTH_RATE_LIMIT_MAX_ATTEMPTS: "${AUTH_RATE_LIMIT_MAX_ATTEMPTS:-20}"
+      AUTH_RATE_LIMIT_WINDOW_MS: "${AUTH_RATE_LIMIT_WINDOW_MS:-600000}"
+      API_RATE_LIMIT_ENABLED: "${API_RATE_LIMIT_ENABLED:-true}"
+      API_RATE_LIMIT_MAX_ATTEMPTS: "${API_RATE_LIMIT_MAX_ATTEMPTS:-300}"
+      API_RATE_LIMIT_WINDOW_MS: "${API_RATE_LIMIT_WINDOW_MS:-900000}"
+      ACCESS_TOKEN_TTL_SECONDS: "${ACCESS_TOKEN_TTL_SECONDS:-900}"
+      REFRESH_TOKEN_TTL_DAYS: "${REFRESH_TOKEN_TTL_DAYS:-7}"
+    restart: unless-stopped
+
+  tickets:
+    build:
+      context: ./tickets
+    depends_on:
+      - tickets-mongo
+      - rabbitmq
+      - orders
+    environment:
+      NODE_ENV: development
+      MONGO_URI: mongodb://tickets-mongo:27017/tickets
+      JWT_KEY: "${JWT_KEY:-change-me-jwt-key}"
+      ADMIN_EMAIL: "${ADMIN_EMAIL:-fl2on@proton.me}"
+      RABBITMQ_URL: "amqp://${RABBITMQ_TICKETS_USER:-tickets-user}:${RABBITMQ_TICKETS_PASS:-tickets-password}@rabbitmq:5672/${RABBITMQ_APP_VHOST:-cinemax}"
+      RABBITMQ_PREFETCH: "${RABBITMQ_PREFETCH:-10}"
+      RABBITMQ_MAX_RETRIES: "${RABBITMQ_MAX_RETRIES:-3}"
+      RABBITMQ_RETRY_DELAY_MS: "${RABBITMQ_RETRY_DELAY_MS:-5000}"
+      RABBITMQ_REQUIRE_TLS: "${RABBITMQ_REQUIRE_TLS:-false}"
+      CLIENT_URL: "${CLIENT_URL:-http://localhost:3000}"
+      ALLOWED_ORIGINS: "${ALLOWED_ORIGINS:-http://localhost:3000,http://127.0.0.1:3000,http://localhost,http://127.0.0.1}"
+      API_RATE_LIMIT_ENABLED: "${API_RATE_LIMIT_ENABLED:-true}"
+      API_RATE_LIMIT_MAX_ATTEMPTS: "${API_RATE_LIMIT_MAX_ATTEMPTS:-300}"
+      API_RATE_LIMIT_WINDOW_MS: "${API_RATE_LIMIT_WINDOW_MS:-900000}"
+      SEED_DEFAULT_TICKETS: "${SEED_DEFAULT_TICKETS:-true}"
+    restart: unless-stopped
+
+  orders:
+    build:
+      context: ./orders
+    depends_on:
+      - orders-mongo
+      - rabbitmq
+    environment:
+      NODE_ENV: development
+      MONGO_URI: mongodb://orders-mongo:27017/orders
+      JWT_KEY: "${JWT_KEY:-change-me-jwt-key}"
+      ADMIN_EMAIL: "${ADMIN_EMAIL:-fl2on@proton.me}"
+      RABBITMQ_URL: "amqp://${RABBITMQ_ORDERS_USER:-orders-user}:${RABBITMQ_ORDERS_PASS:-orders-password}@rabbitmq:5672/${RABBITMQ_APP_VHOST:-cinemax}"
+      RABBITMQ_PREFETCH: "${RABBITMQ_PREFETCH:-10}"
+      RABBITMQ_MAX_RETRIES: "${RABBITMQ_MAX_RETRIES:-3}"
+      RABBITMQ_RETRY_DELAY_MS: "${RABBITMQ_RETRY_DELAY_MS:-5000}"
+      RABBITMQ_REQUIRE_TLS: "${RABBITMQ_REQUIRE_TLS:-false}"
+      TICKETS_SERVICE_URL: "http://tickets:3000"
+      CLIENT_URL: "${CLIENT_URL:-http://localhost:3000}"
+      ALLOWED_ORIGINS: "${ALLOWED_ORIGINS:-http://localhost:3000,http://127.0.0.1:3000,http://localhost,http://127.0.0.1}"
+      API_RATE_LIMIT_ENABLED: "${API_RATE_LIMIT_ENABLED:-true}"
+      API_RATE_LIMIT_MAX_ATTEMPTS: "${API_RATE_LIMIT_MAX_ATTEMPTS:-300}"
+      API_RATE_LIMIT_WINDOW_MS: "${API_RATE_LIMIT_WINDOW_MS:-900000}"
+    restart: unless-stopped
+
+  expiration:
+    build:
+      context: ./expiration
+    depends_on:
+      - rabbitmq
+      - redis
+    environment:
+      NODE_ENV: development
+      RABBITMQ_URL: "amqp://${RABBITMQ_EXPIRATION_USER:-expiration-user}:${RABBITMQ_EXPIRATION_PASS:-expiration-password}@rabbitmq:5672/${RABBITMQ_APP_VHOST:-cinemax}"
+      RABBITMQ_PREFETCH: "${RABBITMQ_PREFETCH:-10}"
+      RABBITMQ_MAX_RETRIES: "${RABBITMQ_MAX_RETRIES:-3}"
+      RABBITMQ_RETRY_DELAY_MS: "${RABBITMQ_RETRY_DELAY_MS:-5000}"
+      RABBITMQ_REQUIRE_TLS: "${RABBITMQ_REQUIRE_TLS:-false}"
+      REDIS_HOST: redis
+    restart: unless-stopped
+
+  payments:
+    build:
+      context: ./payments
+    depends_on:
+      - payments-mongo
+      - rabbitmq
+    environment:
+      NODE_ENV: development
+      MONGO_URI: mongodb://payments-mongo:27017/payments
+      JWT_KEY: "${JWT_KEY:-change-me-jwt-key}"
+      ADMIN_EMAIL: "${ADMIN_EMAIL:-fl2on@proton.me}"
+      RABBITMQ_URL: "amqp://${RABBITMQ_PAYMENTS_USER:-payments-user}:${RABBITMQ_PAYMENTS_PASS:-payments-password}@rabbitmq:5672/${RABBITMQ_APP_VHOST:-cinemax}"
+      RABBITMQ_PREFETCH: "${RABBITMQ_PREFETCH:-10}"
+      RABBITMQ_MAX_RETRIES: "${RABBITMQ_MAX_RETRIES:-3}"
+      RABBITMQ_RETRY_DELAY_MS: "${RABBITMQ_RETRY_DELAY_MS:-5000}"
+      RABBITMQ_REQUIRE_TLS: "${RABBITMQ_REQUIRE_TLS:-false}"
+      STRIPE_KEY: "${STRIPE_KEY:-sk_test_change_me}"
+      ENTRY_PASS_SECRET: "${ENTRY_PASS_SECRET:-entry-pass-local-secret}"
+      ENTRY_PASS_TTL_MINUTES: "${ENTRY_PASS_TTL_MINUTES:-240}"
+      CLIENT_URL: "${CLIENT_URL:-http://localhost:3000}"
+      ALLOWED_ORIGINS: "${ALLOWED_ORIGINS:-http://localhost:3000,http://127.0.0.1:3000,http://localhost,http://127.0.0.1}"
+      API_RATE_LIMIT_ENABLED: "${API_RATE_LIMIT_ENABLED:-true}"
+      API_RATE_LIMIT_MAX_ATTEMPTS: "${API_RATE_LIMIT_MAX_ATTEMPTS:-300}"
+      API_RATE_LIMIT_WINDOW_MS: "${API_RATE_LIMIT_WINDOW_MS:-900000}"
+    restart: unless-stopped
+
+volumes:
+  rabbitmq-data:
+  redis-data:
+  auth-mongo-data:
+  tickets-mongo-data:
+  orders-mongo-data:
+  payments-mongo-data:
