@@ -2,7 +2,7 @@ import request from "supertest";
 import { app } from "../../app";
 import mongoose from "mongoose";
 
-const ADMIN_EMAIL = process.env.ADMIN_EMAIL || "fl2on@proton.me";
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL || "test@test.me";
 const adminCookie = () => global.signin(undefined, "admin", ADMIN_EMAIL);
 
 it("returns a 404 if the ticket is not found", async () => {
