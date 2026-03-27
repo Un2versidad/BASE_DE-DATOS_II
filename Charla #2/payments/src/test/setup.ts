@@ -17,7 +17,7 @@ process.env.STRIPE_KEY = "sk_test_hnfrAm8rOkryFEnV23jjfFlw";
 let mongo: any;
 beforeAll(async () => {
   process.env.JWT_KEY = "asdfasdf";
-  process.env.ADMIN_EMAIL = "fl2on@proton.me";
+  process.env.ADMIN_EMAIL = "test@test.me";
   process.env.ENTRY_PASS_SECRET = "entry-pass-secret-for-tests";
   process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
