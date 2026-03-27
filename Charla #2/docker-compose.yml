@@ -88,7 +88,7 @@ services:
       NODE_ENV: development
       MONGO_URI: mongodb://auth-mongo:27017/auth
       JWT_KEY: "${JWT_KEY:-change-me-jwt-key}"
-      ADMIN_EMAIL: "${ADMIN_EMAIL:-fl2on@proton.me}"
+      ADMIN_EMAIL: "${ADMIN_EMAIL:-test@test.me}"
       CLIENT_URL: "${CLIENT_URL:-http://localhost:3000}"
       ALLOWED_ORIGINS: "${ALLOWED_ORIGINS:-http://localhost:3000,http://127.0.0.1:3000,http://localhost,http://127.0.0.1}"
       HCAPTCHA_REQUIRED: "${HCAPTCHA_REQUIRED:-true}"
@@ -115,7 +115,7 @@ services:
       NODE_ENV: development
       MONGO_URI: mongodb://tickets-mongo:27017/tickets
       JWT_KEY: "${JWT_KEY:-change-me-jwt-key}"
-      ADMIN_EMAIL: "${ADMIN_EMAIL:-fl2on@proton.me}"
+      ADMIN_EMAIL: "${ADMIN_EMAIL:-test@test.me}"
       RABBITMQ_URL: "amqp://${RABBITMQ_TICKETS_USER:-tickets-user}:${RABBITMQ_TICKETS_PASS:-tickets-password}@rabbitmq:5672/${RABBITMQ_APP_VHOST:-cinemax}"
       RABBITMQ_PREFETCH: "${RABBITMQ_PREFETCH:-10}"
       RABBITMQ_MAX_RETRIES: "${RABBITMQ_MAX_RETRIES:-3}"
@@ -139,7 +139,7 @@ services:
       NODE_ENV: development
       MONGO_URI: mongodb://orders-mongo:27017/orders
       JWT_KEY: "${JWT_KEY:-change-me-jwt-key}"
-      ADMIN_EMAIL: "${ADMIN_EMAIL:-fl2on@proton.me}"
+      ADMIN_EMAIL: "${ADMIN_EMAIL:-test@test.me}"
       RABBITMQ_URL: "amqp://${RABBITMQ_ORDERS_USER:-orders-user}:${RABBITMQ_ORDERS_PASS:-orders-password}@rabbitmq:5672/${RABBITMQ_APP_VHOST:-cinemax}"
       RABBITMQ_PREFETCH: "${RABBITMQ_PREFETCH:-10}"
       RABBITMQ_MAX_RETRIES: "${RABBITMQ_MAX_RETRIES:-3}"
@@ -179,7 +179,7 @@ services:
       NODE_ENV: development
       MONGO_URI: mongodb://payments-mongo:27017/payments
       JWT_KEY: "${JWT_KEY:-change-me-jwt-key}"
-      ADMIN_EMAIL: "${ADMIN_EMAIL:-fl2on@proton.me}"
+      ADMIN_EMAIL: "${ADMIN_EMAIL:-test@test.me}"
       RABBITMQ_URL: "amqp://${RABBITMQ_PAYMENTS_USER:-payments-user}:${RABBITMQ_PAYMENTS_PASS:-payments-password}@rabbitmq:5672/${RABBITMQ_APP_VHOST:-cinemax}"
       RABBITMQ_PREFETCH: "${RABBITMQ_PREFETCH:-10}"
       RABBITMQ_MAX_RETRIES: "${RABBITMQ_MAX_RETRIES:-3}"
