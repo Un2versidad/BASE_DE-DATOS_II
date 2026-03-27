@@ -3,7 +3,7 @@ import { app } from "../../app";
 import { Ticket } from "../../models/ticket";
 import { rabbitWrapper } from "../../rabbit-wrapper";
 
-const ADMIN_EMAIL = process.env.ADMIN_EMAIL || "fl2on@proton.me";
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL || "test@test.me";
 const adminCookie = () => global.signin(undefined, "admin", ADMIN_EMAIL);
 
 it("has a route handler listening to /api/tickets for post requests", async () => {
