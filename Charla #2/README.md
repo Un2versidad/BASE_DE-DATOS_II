@@ -1,4 +1,6 @@
+
 <div align="center">
+<img width="300" height="200" alt="image" src="https://github.com/user-attachments/assets/1de676b6-1c30-443d-94a3-f67f13056dda" />
 
 # 🎬 CineMax · Ticketing Platform
 
