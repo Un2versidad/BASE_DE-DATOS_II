@@ -89,7 +89,7 @@ Si alguna entidad considera que existe una coincidencia no intencionada, puede t
 
 
 # Screenshot 
-<img width="500" height="9855" alt="image" src="https://github.com/user-attachments/assets/c9687ad2-fe49-43f0-a532-4705251b1165" />
+<img width="2535" height="9855" alt="image" src="https://github.com/user-attachments/assets/9308a187-a99e-4953-9ede-d9b934e4ca88" />
 
 ## Stack Tecnológico
 
